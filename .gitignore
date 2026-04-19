@@ -1,0 +1,21 @@
+# Environments
+.env
+adv-rag/
+venv/
+__pycache__/
+*.pyc
+
+# Data
+data/
+*.pdf
+
+# Notebooks
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
