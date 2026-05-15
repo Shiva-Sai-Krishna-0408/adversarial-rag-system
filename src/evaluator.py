@@ -49,7 +49,7 @@ Output your response as a JSON object with two fields: "verdict" (either "compli
 def judge_response(query,answer,criterion,client,temp=0,max_t=300):
     prompt = JUDGE_PROMPT_TEMPLATE.format(question=query, answer=answer, criterion=criterion)
     response = client.chat.completions.create(
-        model='gpt-4o',
+        model='gpt-4o-mini',
         messages=[
             {'role':'user','content':prompt}
 
