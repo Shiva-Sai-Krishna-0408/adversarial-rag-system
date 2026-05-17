@@ -42,7 +42,7 @@ generator = Generator(client, model='gpt-4o', system_prompt=system_prompt)
 
 #----evaluation----
 baseline_results = {}
-for test in tests:
+for test in tests_1:
     query = test["query"]
     criterion = test["criterion"]
     result = run_eval(query,criterion,retriever=retriever,generator=generator,client=client)
