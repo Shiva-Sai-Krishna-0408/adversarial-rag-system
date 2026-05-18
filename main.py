@@ -3,6 +3,7 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+from anthropic import Anthropic
 import json
 
 from src.extractor import extract_text_pypdf
@@ -13,11 +14,12 @@ from src.retriever import Retriever
 from src.generator import Generator
 from src.pipeline import answer_query
 from src.evaluator import run_eval
-from attacks.tests import tests
+from attacks.tests import tests_SPE
 
 # --- setup: load env, build OpenAI client ---
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client_anthropic = Anthropic()
 
 # --- ingestion: extract, clean, chunk all PDFs into all_chunks ---
 path = r'C:\Users\Shiva\projects\adversarial-rag-system\data'
@@ -42,15 +44,15 @@ generator = Generator(client, model='gpt-4o', system_prompt=system_prompt)
 
 #----evaluation----
 baseline_results = {}
-for test in tests_1:
+for test in tests_SPE:
     query = test["query"]
     criterion = test["criterion"]
-    result = run_eval(query,criterion,retriever=retriever,generator=generator,client=client)
+    result = run_eval(query,criterion,retriever=retriever,generator=generator,client=client_anthropic)
     baseline_results[test['id']] = result
 
 for test_id,result in baseline_results.items():
     print(test_id,result['asr'])
 
-with open("attacks/baseline_results.json", "w") as f:
+with open("attacks/baseline_results_spe.json", "w") as f:
     json.dump(baseline_results,f,indent=2)
     
