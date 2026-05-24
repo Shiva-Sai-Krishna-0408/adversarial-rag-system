@@ -19,6 +19,8 @@ Same judge applied to baseline and defended runs — biases cancel in the delta.
 ## Statistical
 - N=20 per attack class for baseline. Final reported numbers will use N=50.
 - Target model at temperature=0.7 (intentional, for realism). Introduces stochastic variance in compliance outcomes across reruns.
+- OpenAI's adaptive moderation catches up on reruns — attacks that passed cleanly on the first run get refused later. Rerun ASRs are therefore understated; first-run numbers are the truest signal.
+
 
 ## Corpus
 - 3 ToS documents (Apple, GitHub, OpenAI). Narrow domain — findings may not generalize to RAG systems with technical documentation, code, or factual knowledge bases.
