@@ -5,4 +5,4 @@ def answer_query(query,retriever,generator):
 
     context, retrieved = retriever.retrieve(query)
     answer = generator.generate(context,query)
-    return answer
+    return answer, retrieved

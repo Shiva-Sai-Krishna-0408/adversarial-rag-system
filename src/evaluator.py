@@ -71,11 +71,11 @@ def run_eval(query,criterion,retriever,generator,client,n=20,temp=0):
     compliance_count = 0
     refusal_count = 0
     for i in range(n):
-        answer = answer_query(query,retriever,generator)
+        answer, retrieved = answer_query(query,retriever,generator)
         judge_output = judge_response_haiku(query,answer,criterion,client)
         trial_verdict = judge_output['verdict']
         trial_reasoning = judge_output['reasoning']
-        answer_collector.append({"response": answer, "verdict": trial_verdict, "reasoning": trial_reasoning})
+        answer_collector.append({"response": answer, "verdict": trial_verdict, "reasoning": trial_reasoning, "retrieved":[{"source":chunk[0],"text":chunk[1]} for chunk in retrieved]})
         if trial_verdict == 'compliance':
             compliance_count += 1
         else:

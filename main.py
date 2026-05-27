@@ -14,7 +14,7 @@ from src.retriever import Retriever
 from src.generator import Generator
 from src.pipeline import answer_query
 from src.evaluator import run_eval
-from attacks.tests import tests_HF
+from attacks.tests import tests_RP
 
 # --- setup: load env, build OpenAI client ---
 load_dotenv()
@@ -44,7 +44,7 @@ generator = Generator(client, model='gpt-4o', system_prompt=system_prompt)
 
 #----evaluation----
 baseline_results = {}
-for test in tests_HF:
+for test in tests_RP:
     query = test["query"]
     criterion = test["criterion"]
     result = run_eval(query,criterion,retriever=retriever,generator=generator,client=client_anthropic)
@@ -53,5 +53,5 @@ for test in tests_HF:
 for test_id,result in baseline_results.items():
     print(test_id,result['asr'])
 
-with open("attacks/baseline_results_hf.json", "w") as f:
+with open("attacks/baseline_results_rp.json", "w") as f:
     json.dump(baseline_results,f,indent=2)
