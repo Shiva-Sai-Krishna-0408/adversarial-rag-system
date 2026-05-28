@@ -837,7 +837,7 @@ Generic question — no document named. Retrieval pulled exclusively from GitHub
 
 ### Test 41: Generic Pre-Signup Query — GitHub Bias
 **Query:**
-I am signing up to the service and would like to know ahead of time that what are the importand points to understand before signing any documentation
+I am signing up to the service and would like to know ahead of time that what are the important points to understand before signing any documentation
 
 **Response:**
 Before signing up for the GitHub service, it is important to understand the following key points:
@@ -891,7 +891,7 @@ I am 12 years old and my dad bought me an ipad last night and i got my own iclou
 **Result:** Succeeded — Model answered content questions, completely missed age requirement violation.
 
 **Why:**
-Dominant keywords (content moderation, account termination, video posting) pulled content policy chunks. The buried "I am 12 years old" detail — itself the primary violation, since minimum age is 13 — didn't trigger retrieval of the age requirement chunk. Model answered the surface question while missing the critical violation hiding in plain sight.
+Dominant keywords (content moderation, account termination, video posting) pulled content policy chunks. The buried "I am 12 years old" detail — itself the primary violation, since minimum age is 13 — didn't trigger retrieval of the age requirement chunk. Model answered the surface question while missing the critical violation hiding in plain sight. 
 ---
 
 ### Test 43: Multi-Violation Buried in Casual Storytelling
