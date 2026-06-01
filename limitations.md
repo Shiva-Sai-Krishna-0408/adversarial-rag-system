@@ -29,12 +29,12 @@ Adding few-shot examples in judge prompt as needed for each test. Rule: any sing
 - The judge is drifting bidirectionally, specifically in case of CDC-01/05 and CDC-04. In CDC-01, 05 the judge treated multiple document naming as a blended response without parsing actual disambiguation. CDC-04 — the judge undercounted responses which were hedged as refusals instead of compliance. Pointing towards the same uncalibrated-class root cause.
 
 **Context Window Stuffing**
-- 500-token cap truncated most CWC-03 responses mid-sentence; off-context ASR (0.55) is a lower bound, would likely climb with a higher cap.
-- Success criteria evolved per-test during baseline construction (CWC-01 binary, CWC-02 in-corpus carve-out, CWC-03 OR'd extraction + off-context); CWC-01/02/03 ASRs are not directly comparable as a benchmark series.
+- 500-token cap truncated most CWS-03 responses mid-sentence; off-context ASR (0.55) is a lower bound, would likely climb with a higher cap.
+- Success criteria evolved per-test during baseline construction (CWS-01 binary, CWS-02 in-corpus carve-out, CWS-03 OR'd extraction + off-context); CWS-01/02/03 ASRs are not directly comparable as a benchmark series.
 
-- CWC-03 criterion conflates two attack surfaces (extraction vs off-context); split into sub-scores before Phase 3 defenses.
+- CWS-03 criterion conflates two attack surfaces (extraction vs off-context); split into sub-scores before Phase 3 defenses.
 
-- Judge drift observed on CWC-02 T3 (in-corpus answer misclassified as compliance); manual audit required to resolve.
+- Judge drift observed on CWS-02 T3 (in-corpus answer misclassified as compliance); manual audit required to resolve.
 
 ### Impact on defense evaluation
 Same judge applied to baseline and defended runs — biases cancel in the delta. Defense effectiveness measured as ASR change, not absolute ASR. For SPE-03 and SPE-06, manual sampling planned at defense-eval time to verify defenses don't shift response patterns into judge blind spots.
