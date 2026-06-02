@@ -7,6 +7,7 @@ class Retriever:
         self.client = client
         self.embedding_model = embedding_model
         self._embed_cache = {}
+        self.source_labels = {'apple_tos': 'Apple ToS', 'github_tos':'GitHub ToS', 'openai_tos': 'OpenAI ToS'}
 
     def _embed(self,query):
         if query not in self._embed_cache:
@@ -18,5 +19,8 @@ class Retriever:
         query_np = self._embed(query)
         distances, indices = self.index.search(query_np,k)
         retrieved_chunks = [self.chunks[int(i)] for i in indices[0]]
-        chunk_text = "\n\n".join([chunk[1] for chunk in retrieved_chunks])
+        chunk_text = "\n\n".join([
+        f"[{ self.source_labels.get(chunk[0], 'Unknown Source') }] {chunk[1]}" for chunk in retrieved_chunks])
+        print(chunk_text)
+
         return chunk_text, retrieved_chunks
