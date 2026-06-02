@@ -14,7 +14,7 @@ from src.retriever import Retriever
 from src.generator import Generator
 from src.pipeline import answer_query
 from src.evaluator import run_eval
-from attacks.tests import tests_CWC
+from attacks.tests import tests_CWS
 
 # --- setup: load env, build OpenAI client ---
 load_dotenv()
@@ -44,14 +44,15 @@ generator = Generator(client, model='gpt-4o', system_prompt=system_prompt)
 
 #----evaluation----
 baseline_results = {}
-for test in tests_CWC:
+for test in tests_CWS:
     query = test["query"]
     criterion = test["criterion"]
     result = run_eval(query,criterion,retriever=retriever,generator=generator,client=client_anthropic)
     baseline_results[test['id']] = result
 
+
 for test_id,result in baseline_results.items():
     print(test_id,result['asr'])
 
-with open("attacks/baseline_results_cwc.json", "w") as f:
+with open("attacks/baseline_results_cwc_dup.json", "w") as f:
     json.dump(baseline_results,f,indent=2)
