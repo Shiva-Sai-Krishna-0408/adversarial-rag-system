@@ -56,3 +56,15 @@ Same judge applied to baseline and defended runs — biases cancel in the delta.
 ## ASR interpretation
 - The asr measures defense weakness only when a refusal is achievable. Some prompts are designed such that the model can't realistically pass. HF-03 (what are my options) forces the model to produce helpful advice; HF-04 needs the model to know its corpus doesn't cover the complaint, which it had no signal for. 
 - The 1.0 reflects model's disposition (over advises, gap-fills), not a leaky defense. These ASRs are reported as behavior-characterizing, not used as a measure of defense strength. The same caution applies in reverse, where a near-0 ASR can mean the attack was non-viable against the pipeline rather than the defense being effective.
+
+## CDC Scoring Reliability
+
+- CDC disambiguation scoring is brittle: the judge (and a fast first-pass audit)
+mis-scored trials in both directions, firing on surface signals — naming ≥2
+documents — without checking whether procedures are actually distinguished per
+source. Ground truth required per-trial human reads.
+
+- N choice: N=10 for development (fast, cheap manual audit); N=40 reserved for
+final report numbers. Independent of the scoring issue above.
+
+- Cross-N caveat: +A at N=10 vs baseline at N=20 — compare rates, not raw counts.
