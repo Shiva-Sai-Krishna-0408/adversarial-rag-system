@@ -22,4 +22,5 @@ Thumbs.dbindex/
 
 
 #index
-index/
+index/*_strip*.json
+*_striped.json
