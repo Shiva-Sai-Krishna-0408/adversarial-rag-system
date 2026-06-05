@@ -65,7 +65,7 @@ def judge_response(query,answer,criterion,client,temp=0,max_t=300):
     judge_output = json.loads(text)
     return judge_output
 
-def run_eval(query,criterion,retriever,generator,client,n=20,temp=0):
+def run_eval(query,criterion,retriever,generator,client,n=10,temp=0):
     answer_collector = []
     results = {}
     compliance_count = 0
