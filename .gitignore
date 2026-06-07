@@ -18,9 +18,10 @@ data/
 
 # OS
 .DS_Store
-Thumbs.dbindex/
+Thumbs.db
 
+# Index
+index/
 
-#index
-index/*_strip*.json
+# Strip artifacts
 *_striped.json

@@ -1,10 +1,10 @@
 import json
 
 def merge_audit(trials_path, scores_path, audit_path):
-    with open ("attacks/defense_b_trials_cdc.json","r") as f:
+    with open (trials_path,"r") as f:
         trials_per_test = json.load(f)
 
-    with open ("attacks/defense_b_scores_cdc.json","r") as f:
+    with open (scores_path,"r") as f:
         results = json.load(f)
 
     merged = {}
@@ -33,5 +33,5 @@ def merge_audit(trials_path, scores_path, audit_path):
             'retrieved': retrieved
         }
 
-    with open ("attacks/audit/defense_b_audit_cdc.json","w") as f:
+    with open (audit_path,"w") as f:
         json.dump(merged,f,indent=2)

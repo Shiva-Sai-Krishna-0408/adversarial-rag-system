@@ -1,3 +1,4 @@
+import time
 from src.pipeline import answer_query
 
 def run_trials(query, retriever, generator, n):
@@ -5,4 +6,5 @@ def run_trials(query, retriever, generator, n):
     for i in range (n):
         response,retrieved = answer_query(query,retriever,generator)
         trials.append({"response": response, "retrieved": retrieved})
+        time.sleep(2)
     return trials
