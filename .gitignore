@@ -25,3 +25,5 @@ index/
 
 # Strip artifacts
 *_striped.json
+criteria_dump.txt
+judge_compare.py
