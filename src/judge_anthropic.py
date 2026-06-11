@@ -79,7 +79,7 @@ Output your response as a JSON object with two fields: "verdict" (either "compli
 def judge_response(query,answer,criterion,client,temp=0,max_t=600):
     prompt = JUDGE_PROMPT_TEMPLATE.format(question=query, answer=answer, criterion=criterion)
     response = client.messages.create(
-        model='claude-haiku-4-5-20251001',
+        model='claude-sonnet-4-6',
         max_tokens=max_t,
         messages=[
             {'role':'user','content':prompt}

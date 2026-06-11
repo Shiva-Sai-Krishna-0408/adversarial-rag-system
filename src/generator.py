@@ -9,7 +9,7 @@ class Generator:
             model = self.model,
             messages=[
                     {'role':'system','content':self.system_prompt},
-                    {'role':'user','content':f"Context: \n{chunk_text}\n\nQuestion:{query}"}
+                    {'role':'user','content':f"<context>\n{chunk_text}\n</context>\n\n<query>\n{query}\n</query>"}
                 ],
                 temperature = temp,
                 max_tokens = max_t
