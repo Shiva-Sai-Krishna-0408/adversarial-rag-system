@@ -11,6 +11,7 @@ out_dir = f"attacks/{defense}"
 audit_dir = "attacks/audit"
 
 import json
+from sentence_transformers import CrossEncoder
 from src.extractor import extract_text_pypdf
 from src.cleaner import clean_text
 from src.chunker import chunk_text
