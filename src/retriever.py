@@ -1,3 +1,5 @@
+import numpy as np
+
 class Retriever:
     def __init__(self,chunks,index,client,embedding_model, reranker):
         self.chunks = chunks

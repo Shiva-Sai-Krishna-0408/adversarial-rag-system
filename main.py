@@ -22,7 +22,7 @@ from src.pipeline import answer_query
 from src.run_trials import run_trials
 from src.score import score
 from src.merge_audit import merge_audit
-from attacks.tests import tests_CDC, tests_PI, tests_SPE, tests_MLI, tests_HF
+from attacks.tests import tests_CDC, tests_PI, tests_SPE, tests_MLI, tests_HF, tests_RP
 
 # --- setup: load env, build OpenAI client ---
 load_dotenv()
@@ -64,7 +64,7 @@ test_classes=[
 ("spe",tests_SPE),
 ("mli",tests_MLI),
 ("hf",tests_HF),
-# ("rp",tests_RP),
+("rp",tests_RP),
 # ("cws",tests_CWS)
 ]
 
