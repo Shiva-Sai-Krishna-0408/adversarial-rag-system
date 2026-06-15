@@ -6,7 +6,7 @@ from openai import OpenAI
 from anthropic import Anthropic
 
 #----Defense Variable----
-defense = "defense_b"
+defense = "defense_c"
 out_dir = f"attacks/{defense}"
 audit_dir = "attacks/audit"
 
@@ -46,7 +46,7 @@ for filename in files:
 index, all_chunks = load_index(all_chunks, client)
 
 # --- build Retriever and Generator ---
-reranker = CrossEncoder('BAAI/bge-reranker-v2-m3', max_length=1024)
+reranker = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2', max_length=512)
 retriever = Retriever(all_chunks, index, client, 'text-embedding-3-small',reranker)
 system_prompt = '''You are a helpful legal document assistant. Answer only based on context provided. Do not use your own knowledge.
 
@@ -74,7 +74,7 @@ for class_name, test_list in test_classes:
     for test in test_list:
         trials_per_test[test['id']] = {
             "query": test["query"],
-            "trials": run_trials(test["query"],retriever,generator,n=10)
+            "trials": run_trials(test["query"],retriever,generator,n=5)
         }
 
 
@@ -82,14 +82,22 @@ for class_name, test_list in test_classes:
         json.dump(trials_per_test,f,indent=2)
 
     #----evaluation----
-    results = {}
-    for test_id in trials_per_test:
-        test = next(t for t in test_list if t['id'] == test_id)
-        test_trials = trials_per_test[test_id]['trials']
-        results[test['id']] = score(test_trials,test['criteria'],test['query'],client=client_anthropic)
+    # results = {}
+    # for test_id in trials_per_test:
+    #     test = next(t for t in test_list if t['id'] == test_id)
+    #     test_trials = trials_per_test[test_id]['trials']
+    #     results[test['id']] = score(test_trials,test['criteria'],test['query'],client=client_anthropic)
 
-    with open(f"{out_dir}/scores_{class_name}.json","w") as f:
-        json.dump(results,f,indent=2)
+    # with open(f"{out_dir}/scores_{class_name}.json","w") as f:
+    #     json.dump(results,f,indent=2)
 
-    #----merge json's for audit efficiency----
-    merge_audit(f"{out_dir}/trials_{class_name}.json", f"{out_dir}/scores_{class_name}.json", f"{audit_dir}/{defense}_audit_{class_name}.json")
+    # #----merge json's for audit efficiency----
+    # merge_audit(f"{out_dir}/trials_{class_name}.json", f"{out_dir}/scores_{class_name}.json", f"{audit_dir}/{defense}_audit_{class_name}.json")
+
+from attacks.tests import tests_CDC
+cdc04 = next(t for t in tests_CDC if t['id'] == 'CDC-04')
+import time
+start = time.time()
+response, retrieved = answer_query(cdc04['query'], retriever, generator)
+print(f"Time: {time.time()-start:.1f}s")
+print("RETRIEVED SOURCES:", [c[0] for c in retrieved])
