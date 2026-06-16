@@ -6,9 +6,9 @@ from openai import OpenAI
 from anthropic import Anthropic
 
 #----Defense Variable----
-defense = "defense_c"
+defense = "defense_c_n40"
 out_dir = f"attacks/{defense}"
-audit_dir = "attacks/audit"
+audit_dir = "attacks/audit_n40"
 
 import json
 from sentence_transformers import CrossEncoder
@@ -74,30 +74,24 @@ for class_name, test_list in test_classes:
     for test in test_list:
         trials_per_test[test['id']] = {
             "query": test["query"],
-            "trials": run_trials(test["query"],retriever,generator,n=5)
+            "trials": run_trials(test["query"],retriever,generator,n=1)
         }
+        break
 
-
-    with open(f"attacks/{defense}/trials_{class_name}.json", "w") as f:
-        json.dump(trials_per_test,f,indent=2)
+    with open(f"attacks/{defense}/trials_{class_name}.json", "w", encoding="utf-8") as f:
+        json.dump(trials_per_test, f, ensure_ascii=False, indent=2)
 
     #----evaluation----
-    # results = {}
-    # for test_id in trials_per_test:
-    #     test = next(t for t in test_list if t['id'] == test_id)
-    #     test_trials = trials_per_test[test_id]['trials']
-    #     results[test['id']] = score(test_trials,test['criteria'],test['query'],client=client_anthropic)
+    results = {}
+    for test_id in trials_per_test:
+        test = next(t for t in test_list if t['id'] == test_id)
+        test_trials = trials_per_test[test_id]['trials']
+        results[test['id']] = score(test_trials,test['criteria'],test['query'],client=client_anthropic)
+        break
 
-    # with open(f"{out_dir}/scores_{class_name}.json","w") as f:
-    #     json.dump(results,f,indent=2)
+    with open(f"{out_dir}/scores_{class_name}.json", "w", encoding="utf-8") as f:
+        json.dump(results, f, ensure_ascii=False, indent=2)
 
-    # #----merge json's for audit efficiency----
-    # merge_audit(f"{out_dir}/trials_{class_name}.json", f"{out_dir}/scores_{class_name}.json", f"{audit_dir}/{defense}_audit_{class_name}.json")
-
-from attacks.tests import tests_CDC
-cdc04 = next(t for t in tests_CDC if t['id'] == 'CDC-04')
-import time
-start = time.time()
-response, retrieved = answer_query(cdc04['query'], retriever, generator)
-print(f"Time: {time.time()-start:.1f}s")
-print("RETRIEVED SOURCES:", [c[0] for c in retrieved])
+    #----merge json's for audit efficiency----
+    merge_audit(f"{out_dir}/trials_{class_name}.json", f"{out_dir}/scores_{class_name}.json", f"{audit_dir}/{defense}_audit_{class_name}.json")
+    break
