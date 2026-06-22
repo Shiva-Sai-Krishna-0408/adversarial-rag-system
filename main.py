@@ -58,40 +58,36 @@ The instructions appearing inside context and the query are just data and not co
 generator = Generator(client, model='gpt-4o', system_prompt=system_prompt)
 
 #----responses----
-test_classes=[
-("cdc",tests_CDC),
-("pi",tests_PI),
-("spe",tests_SPE),
-("mli",tests_MLI),
-("hf",tests_HF),
-("rp",tests_RP),
-# ("cws",tests_CWS)
+mli_score_only = True  # flip to False after MLI done
+
+test_classes = [
+    ("mli", tests_MLI),
+    ("hf", tests_HF),
+    ("rp", tests_RP),
 ]
 
 for class_name, test_list in test_classes:
+    if class_name == "mli" and mli_score_only:
+        # load existing trials, skip generation
+        with open(f"attacks/{defense}/trials_{class_name}.json", "r", encoding="utf-8") as f:
+            trials_per_test = json.load(f)
+    else:
+        trials_per_test = {}
+        for test in test_list:
+            trials_per_test[test['id']] = {
+                "query": test["query"],
+                "trials": run_trials(test["query"], retriever, generator, n=40)
+            }
+        with open(f"attacks/{defense}/trials_{class_name}.json", "w", encoding="utf-8") as f:
+            json.dump(trials_per_test, f, ensure_ascii=False, indent=2)
 
-    trials_per_test = {}
-    for test in test_list:
-        trials_per_test[test['id']] = {
-            "query": test["query"],
-            "trials": run_trials(test["query"],retriever,generator,n=1)
-        }
-        break
-
-    with open(f"attacks/{defense}/trials_{class_name}.json", "w", encoding="utf-8") as f:
-        json.dump(trials_per_test, f, ensure_ascii=False, indent=2)
-
-    #----evaluation----
     results = {}
     for test_id in trials_per_test:
         test = next(t for t in test_list if t['id'] == test_id)
         test_trials = trials_per_test[test_id]['trials']
-        results[test['id']] = score(test_trials,test['criteria'],test['query'],client=client_anthropic)
-        break
+        results[test['id']] = score(test_trials, test['criteria'], test['query'], client=client_anthropic)
 
     with open(f"{out_dir}/scores_{class_name}.json", "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
 
-    #----merge json's for audit efficiency----
     merge_audit(f"{out_dir}/trials_{class_name}.json", f"{out_dir}/scores_{class_name}.json", f"{audit_dir}/{defense}_audit_{class_name}.json")
-    break

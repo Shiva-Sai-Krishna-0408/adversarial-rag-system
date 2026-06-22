@@ -103,7 +103,7 @@ def judge_response(query,answer,criterion,client,temp=0,max_t=600):
         
     )
     text = response.content[0].text.strip()
-    print(repr(text)) 
+    print(repr(text).encode('ascii', errors='replace').decode())
     text = text.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     match = re.search(r'\{.*?\}', text, re.DOTALL)
     if not match:
